@@ -1,0 +1,39 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeForwardingRule
+metadata:
+  name: jitaccess-http-forwardingrule
+spec:
+  target:
+    targetHTTPProxyRef:
+      name: jitaccess-http-proxy
+  location: northamerica-northeast1
+  loadBalancingScheme: EXTERNAL_MANAGED
+  networkTier: STANDARD
+  portRange: "80"
+  ipProtocol: "TCP"
+  networkRef:
+    external: "https://www.googleapis.com/compute/v1/projects/php-01h3hm7kdb24pb3c972cc50nh5/global/networks/jitaccess-lb-network"
+  ipAddress:
+    addressRef:
+      external: "https://www.googleapis.com/compute/v1/projects/php-01h3hm7kdb24pb3c972cc50nh5/regions/northamerica-northeast1/addresses/jitaccess-ip-regional"
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeTargetHTTPProxy
+metadata:
+  name: jitaccess-http-proxy
+spec:
+  description: Target http proxy for the jitaccess load balancer
+  urlMapRef:
+    name: jitaccess-http-lb
+  location: northamerica-northeast1
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeURLMap
+metadata:
+  name: jitaccess-http-lb
+spec:
+  location: northamerica-northeast1
+  defaultUrlRedirect:
+    httpsRedirect: true
+    redirectResponseCode: "MOVED_PERMANENTLY_DEFAULT"
+    stripQuery: false

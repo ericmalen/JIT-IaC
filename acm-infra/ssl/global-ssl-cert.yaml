@@ -1,0 +1,26 @@
+# Global SSL certificate
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeSSLCertificate
+metadata:
+  name: jitaccess-global-ssl-cert
+spec:
+  location: global
+  description: Global ssl cert for the jitaccess app LB
+  certificate:
+    valueFrom:
+      secretKeyRef:
+        name: jitaccess-global-ssl-data
+        key: certificate
+  privateKey:
+    valueFrom:
+      secretKeyRef:
+        name: jitaccess-global-ssl-data
+        key: privateKey
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jitaccess-global-ssl-data
+stringData:
+  certificate: projects/142631071295/secrets/jitaccess-ssl-cert/versions/1
+  privateKey: projects/142631071295/secrets/jitaccess-ssl-pk/versions/1

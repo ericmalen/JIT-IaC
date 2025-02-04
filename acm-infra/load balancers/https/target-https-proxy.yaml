@@ -1,0 +1,12 @@
+# HTTPS load balancer target proxy
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeTargetHTTPSProxy
+metadata:
+  name: jitaccess-https-proxy
+spec:
+  description: Target https proxy for the jitaccess load balancer
+  urlMapRef:
+    external: jitaccess-lb
+  sslCertificates:
+    - external: jitaccess-global-ssl-cert
+  location: global

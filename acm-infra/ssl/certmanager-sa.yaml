@@ -1,0 +1,20 @@
+# Cert manager service account
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMServiceAccount
+metadata:
+  name: certmanager
+spec:
+  displayName: Certification Manager
+---
+# Cert manager service account DNS admin policy
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: certmanager-dns-admin-policy
+spec:
+  member: serviceAccount:certmanager@php-01h3hm7kdb24pb3c972cc50nh5.iam.gserviceaccount.com
+  role: roles/dns.admin
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/php-01h3hm7kdb24pb3c972cc50nh5

@@ -1,0 +1,11 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeRegionNetworkEndpointGroup
+metadata:
+  name: jitaccess-serverless-neg
+spec:
+  region: northamerica-northeast1
+  description: Regional serverless network endpoint group for jitaccess cloud run service
+  cloudRun:
+    serviceRef:
+      external: jitaccess
+  networkEndpointType: SERVERLESS

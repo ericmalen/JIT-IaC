@@ -1,0 +1,10 @@
+# HTTPS load balancer URL map
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeURLMap
+metadata:
+  name: jitaccess-lb
+spec:
+  location: global
+  defaultService:
+    backendServiceRef:
+      external: jitaccess-backend

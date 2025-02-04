@@ -1,0 +1,18 @@
+# HTTPS load balancer backend service
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeBackendService
+metadata:
+  name: jitaccess-backend
+spec:
+  description: External backend service for the JIT application
+  loadBalancingScheme: EXTERNAL
+  location: global
+  protocol: HTTPS
+  backend:
+    - group:
+        networkEndpointGroupRef:
+          external: https://www.googleapis.com/compute/v1/projects/php-01h3hm7kdb24pb3c972cc50nh5/regions/northamerica-northeast1/networkEndpointGroups/jitaccess-serverless-neg
+  iap:
+    oauth2ClientId: "142631071295-ntoo09e6ueku18bpef8ki4r6a0vo4svt.apps.googleusercontent.com"
+    oauth2ClientSecret:
+      value: projects/142631071295/secrets/jitaccess-oauth2-client/versions/1

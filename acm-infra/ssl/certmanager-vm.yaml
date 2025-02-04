@@ -1,0 +1,41 @@
+# VM to manage SSL certificates (temporary solution until automated process implemented org-wide
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeInstance
+metadata:
+  annotations:
+    client.lifecycle.config.k8s.io/mutation: ignore
+  name: certmanager-vm
+  labels:
+    goog-ec-src: "vm_add-tf"
+spec:
+  bootDisk:
+    autoDelete: true
+    deviceName: "certmanager-vm"
+    initializeParams:
+      size: 20
+      sourceImageRef:
+        external: "projects/centos-cloud/global/images/centos-7-v20230809"
+      type: pd-ssd
+    mode: "READ_WRITE"
+  machineType: "e2-medium"
+  metadata:
+    - key: enable-oslogin
+      value: "true"
+  networkInterface:
+    - accessConfig:
+        - networkTier: PREMIUM
+      subnetworkRef:
+        external: "projects/php-01h3hm7kdb24pb3c972cc50nh5/regions/northamerica-northeast1/subnetworks/anthos-cluster-vpc"
+  scheduling:
+    automaticRestart: true
+    onHostMaintenance: MIGRATE
+    provisioningModel: STANDARD
+  serviceAccount:
+    scopes:
+      - "https://www.googleapis.com/auth/cloud-platform"
+    serviceAccountRef:
+      external: "certmanager@php-01h3hm7kdb24pb3c972cc50nh5.iam.gserviceaccount.com"
+  shieldedInstanceConfig:
+    enableIntegrityMonitoring: true
+    enableVtpm: true
+  zone: "northamerica-northeast1-a"

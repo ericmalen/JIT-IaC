@@ -1,0 +1,34 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: jitaccess
+  namespace: 142631071295
+  labels:
+    cloud.googleapis.com/location: northamerica-northeast1
+  annotations:
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+spec:
+  template:
+    spec:
+      serviceAccountName: jitaccess@php-01h3hm7kdb24pb3c972cc50nh5.iam.gserviceaccount.com
+      containers:
+        - image: northamerica-northeast1-docker.pkg.dev/php-01h3hm7kdb24pb3c972cc50nh5/artifact-registry-repository-docker/jitaccess@sha256:a3aea5248ecbf26bbd5ff4e28aced5b82ef04976eedc8f8b2c787a095df43083
+          env:
+            - name: RESOURCE_SCOPE
+              value: folders/364675254682
+            - name: ELEVATION_DURATION
+              value: "60"
+            - name: JUSTIFICATION_HINT
+              value: "Bug or case number"
+            - name: JUSTIFICATION_PATTERN
+              value: ".*"
+            - name: IAP_BACKEND_SERVICE_ID
+              value: projects/142631071295/secrets/jitaccess-backend-id/versions/1
+            - name: SMTP_HOST
+              value: email-smtp.ca-central-1.amazonaws.com
+            - name: SMTP_SENDER_ADDRESS
+              value: phac.jit.nepasrepondre-donotreply.jat.aspc@phac-aspc.gc.ca
+            - name: SMTP_USERNAME
+              value: projects/142631071295/secrets/jitaccess-smtp-username/versions/2
+            - name: SMTP_SECRET
+              value: projects/142631071295/secrets/jitaccess-smtp-secret/versions/2

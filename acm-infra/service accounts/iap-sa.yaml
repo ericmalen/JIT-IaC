@@ -1,0 +1,12 @@
+# IAP service account
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: jitaccess-run-invoker-policy
+spec:
+  member: serviceAccount:service-142631071295@gcp-sa-iap.iam.gserviceaccount.com
+  role: roles/run.invoker
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/php-01h3hm7kdb24pb3c972cc50nh5

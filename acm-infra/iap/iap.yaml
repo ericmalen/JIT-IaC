@@ -1,0 +1,18 @@
+# IAP brand
+apiVersion: iap.cnrm.cloud.google.com/v1beta1
+kind: IAPBrand
+metadata:
+  name: jitaccess-iap-brand
+spec:
+  applicationTitle: "Just-In-Time Access"
+  supportEmail: "php-jit-iap@gcp.hc-sc.gc.ca"
+---
+# IAP proxy client
+apiVersion: iap.cnrm.cloud.google.com/v1beta1
+kind: IAPIdentityAwareProxyClient
+metadata:
+  name: jitaccess-iap-client
+spec:
+  displayName: "Just-In-Time Access Client"
+  brandRef:
+    name: jitaccess-iap-brand

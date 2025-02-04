@@ -1,0 +1,60 @@
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeForwardingRule
+metadata:
+  name: jitaccess-https-forwardingrule
+spec:
+  target:
+    targetHTTPSProxyRef:
+      name: jitaccess-https-proxy
+  location: northamerica-northeast1
+  loadBalancingScheme: EXTERNAL_MANAGED
+  networkTier: STANDARD
+  portRange: "443"
+  ipProtocol: "TCP"
+  networkRef:
+    external: "https://www.googleapis.com/compute/v1/projects/php-01h3hm7kdb24pb3c972cc50nh5/global/networks/jitaccess-lb-network"
+  ipAddress:
+    addressRef:
+      external: "https://www.googleapis.com/compute/v1/projects/php-01h3hm7kdb24pb3c972cc50nh5/regions/northamerica-northeast1/addresses/jitaccess-ip-regional"
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeTargetHTTPSProxy
+metadata:
+  name: jitaccess-https-proxy
+spec:
+  description: Target https proxy for the jitaccess load balancer
+  urlMapRef:
+    name: jitaccess-https-lb
+  sslCertificates:
+    - external: jitaccess-regional-ssl-cert
+  location: northamerica-northeast1
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeURLMap
+metadata:
+  name: jitaccess-https-lb
+spec:
+  location: northamerica-northeast1
+  defaultService:
+    backendServiceRef:
+      name: jitaccess-lb-backend
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeBackendService
+metadata:
+  name: jitaccess-lb-backend
+spec:
+  description: External backend service for the JIT application
+  loadBalancingScheme: EXTERNAL_MANAGED
+  location: northamerica-northeast1
+  protocol: HTTPS
+  backend:
+    - group:
+        networkEndpointGroupRef:
+          external: https://www.googleapis.com/compute/v1/projects/php-01h3hm7kdb24pb3c972cc50nh5/regions/northamerica-northeast1/networkEndpointGroups/jitaccess-serverless-neg
+      capacityScaler: 1.0
+      balancingMode: UTILIZATION
+  iap:
+    oauth2ClientId: "142631071295-ntoo09e6ueku18bpef8ki4r6a0vo4svt.apps.googleusercontent.com"
+    oauth2ClientSecret:
+      value: "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"

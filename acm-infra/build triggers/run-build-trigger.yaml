@@ -1,0 +1,19 @@
+apiVersion: cloudbuild.cnrm.cloud.google.com/v1beta1
+kind: CloudBuildTrigger
+metadata:
+  name: cloudbuildtrigger-run-service
+spec:
+  description: Cloud Build Trigger for run service
+  disabled: false
+  github:
+    owner: PHACDataHub
+    name: JIT-IaC
+    push:
+      branch: main
+  includedFiles:
+    - "config/app.yaml"
+  build:
+    step:
+      - id: "deploy_application"
+        name: gcr.io/cloud-builders/gcloud
+        args: ["run", "services", "replace", "config/app.yaml"]

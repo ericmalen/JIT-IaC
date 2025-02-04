@@ -1,0 +1,58 @@
+# Application service account
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMServiceAccount
+metadata:
+  name: jitaccess
+spec:
+  displayName: Just-In-Time Access
+---
+# Application service account token creator policy
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: jitaccess-tokencreator-policy
+spec:
+  member: serviceAccount:jitaccess@php-01h3hm7kdb24pb3c972cc50nh5.iam.gserviceaccount.com
+  role: roles/iam.serviceAccountTokenCreator
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/php-01h3hm7kdb24pb3c972cc50nh5
+---
+# Application service account secret accessor policy
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicyMember
+metadata:
+  name: jitaccess-secretaccessor-policy
+spec:
+  member: serviceAccount:jitaccess@php-01h3hm7kdb24pb3c972cc50nh5.iam.gserviceaccount.com
+  role: roles/secretmanager.secretAccessor
+  resourceRef:
+    apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+    kind: Project
+    external: projects/php-01h3hm7kdb24pb3c972cc50nh5
+# These two policy members we're manually configured due to org restrictions
+# ---
+# apiVersion: iam.cnrm.cloud.google.com/v1beta1
+# kind: IAMPolicyMember
+# metadata:
+#   name: jitaccess-security-admin-policy
+# spec:
+#   member: serviceAccount:jitaccess@php-01h3hm7kdb24pb3c972cc50nh5.iam.gserviceaccount.com
+#   role: roles/iam.securityAdmin
+#   resourceRef:
+#     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+#     kind: Folder
+#     external: folders/364675254682
+# ---
+# apiVersion: iam.cnrm.cloud.google.com/v1beta1
+# kind: IAMPolicyMember
+# metadata:
+#   name: jitaccess-cloudasset-viewer-policy
+# spec:
+#   member: serviceAccount:jitaccess@php-01h3hm7kdb24pb3c972cc50nh5.iam.gserviceaccount.com
+#   role: roles/cloudasset.viewer
+#   resourceRef:
+#     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
+#     kind: Folder
+#     external: folders/364675254682

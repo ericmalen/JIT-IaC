@@ -1,0 +1,68 @@
+apiVersion: dns.cnrm.cloud.google.com/v1beta1
+kind: DNSRecordSet
+metadata:
+  name: jitaccess-a-record
+spec:
+  name: "jitaccess.alpha.phac-aspc.gc.ca."
+  type: A
+  ttl: 300
+  managedZoneRef:
+    name: jitaccess-dns-zone
+  rrdatasRefs:
+    - name: jitaccess-ip # Replace with "jitaccess-ip-regional" to test regional load balancer
+      kind: ComputeAddress
+---
+apiVersion: dns.cnrm.cloud.google.com/v1beta1
+kind: DNSRecordSet
+metadata:
+  name: jitaccess-cname-record
+spec:
+  name: "www.jitaccess.alpha.phac-aspc.gc.ca."
+  type: CNAME
+  ttl: 300
+  managedZoneRef:
+    name: jitaccess-dns-zone
+  rrdatas:
+    - "jitaccess.alpha.phac-aspc.gc.ca."
+---
+# FOR DEMO
+apiVersion: dns.cnrm.cloud.google.com/v1beta1
+kind: DNSRecordSet
+metadata:
+  name: demo-jitaccess-a-record
+spec:
+  name: "demo.jitaccess.alpha.phac-aspc.gc.ca."
+  type: A
+  ttl: 300
+  managedZoneRef:
+    name: jitaccess-dns-zone
+  rrdatas:
+    - "34.111.96.216"
+---
+apiVersion: dns.cnrm.cloud.google.com/v1beta1
+kind: DNSManagedZone
+metadata:
+  name: jitaccess-dns-zone
+spec:
+  description: "DNS zone for the JIT application"
+  dnsName: "jitaccess.alpha.phac-aspc.gc.ca."
+  visibility: public
+  dnssecConfig:
+    state: "on"
+---
+# IP Address for global load balancer
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeAddress
+metadata:
+  name: jitaccess-ip
+spec:
+  location: global
+---
+# IP Address for regional load balancer
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeAddress
+metadata:
+  name: jitaccess-ip-regional
+spec:
+  location: northamerica-northeast1
+  networkTier: STANDARD

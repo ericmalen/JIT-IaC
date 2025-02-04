@@ -1,0 +1,11 @@
+# HTTP load balancer URL map
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeURLMap
+metadata:
+  name: jitaccess-http-lb
+spec:
+  location: global
+  defaultUrlRedirect:
+    httpsRedirect: true
+    redirectResponseCode: "MOVED_PERMANENTLY_DEFAULT"
+    stripQuery: false

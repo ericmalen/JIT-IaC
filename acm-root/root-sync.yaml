@@ -1,0 +1,15 @@
+# RootSync object
+apiVersion: configsync.gke.io/v1beta1
+kind: RootSync
+metadata:
+  name: php-jit-root-sync
+  namespace: config-management-system
+spec:
+  sourceType: git
+  sourceFormat: unstructured
+  git:
+    repo: https://source.developers.google.com/p/php-01h3hm7kdb24pb3c972cc50nh5/r/jit-iac
+    auth: gcpserviceaccount
+    dir: acm-infra
+    branch: main
+    gcpServiceAccountEmail: php-jit-cc-sa@php-01h3hm7kdb24pb3c972cc50nh5.iam.gserviceaccount.com

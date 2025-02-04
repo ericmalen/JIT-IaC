@@ -1,0 +1,16 @@
+# HTTPS load balancer forwarding rule
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeForwardingRule
+metadata:
+  name: jitaccess-https-forwardingrule
+spec:
+  target:
+    targetHTTPSProxyRef:
+      external: "https://www.googleapis.com/compute/v1/projects/php-01h3hm7kdb24pb3c972cc50nh5/global/targetHttpsProxies/jitaccess-https-proxy"
+  location: global
+  loadBalancingScheme: EXTERNAL
+  portRange: "443"
+  ipProtocol: "TCP"
+  ipAddress:
+    addressRef:
+      external: "https://www.googleapis.com/compute/v1/projects/php-01h3hm7kdb24pb3c972cc50nh5/global/addresses/jitaccess-ip"

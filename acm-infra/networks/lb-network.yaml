@@ -1,0 +1,31 @@
+# Regional load balancer network
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeSubnetwork
+metadata:
+  name: jitaccess-proxy-only-subnet
+spec:
+  ipCidrRange: 10.129.0.0/23
+  region: northamerica-northeast1
+  networkRef:
+    name: jitaccess-lb-network
+  purpose: REGIONAL_MANAGED_PROXY
+  role: ACTIVE
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeSubnetwork
+metadata:
+  name: jitaccess-lb-subnet
+spec:
+  ipCidrRange: 10.1.2.0/24
+  region: northamerica-northeast1
+  privateIpGoogleAccess: false
+  networkRef:
+    name: jitaccess-lb-network
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeNetwork
+metadata:
+  name: jitaccess-lb-network
+spec:
+  routingMode: REGIONAL
+  autoCreateSubnetworks: false

@@ -1,0 +1,36 @@
+apiVersion: cloudbuild.cnrm.cloud.google.com/v1beta1
+kind: CloudBuildTrigger
+metadata:
+  name: cloudbuildtrigger-container-image
+spec:
+  description: Cloud Build Trigger for image on artifact registry
+  disabled: false
+  github:
+    owner: PHACDataHub
+    name: JIT-IaC
+    push:
+      branch: main
+  includedFiles:
+    - "app.yaml"
+  substitutions:
+    "_SERVICE_NAME": "jitaccess"
+    "_REGION": "northamerica-northeast1"
+    "_ARTIFACT_REGISTRY_REPO": "artifact-registry-repository-docker"
+  build:
+    images: ["${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"]
+    step:
+      - id: "clone_container_image"
+        name: gcr.io/cloud-builders/git
+        args: ["clone", "https://github.com/GoogleCloudPlatform/jit-access.git"]
+      - id: "clone_latest_branch"
+        name: gcr.io/cloud-builders/git
+        args: ["checkout", "latest"]
+        dir: "jit-access/sources"
+      - id: "build_docker_image"
+        name: gcr.io/cloud-builders/docker
+        args: ["build", "-t", "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}","."]
+        dir: "jit-access/sources"
+      - id: "push_docker_image"
+        name: gcr.io/cloud-builders/docker
+        args: ["push", "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/${_SERVICE_NAME}:${COMMIT_SHA}"]
+        dir: "jit-access/sources"
