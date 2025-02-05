@@ -42,7 +42,16 @@ Just-in-time privileged access management is a strategy that provides users with
 
 ## Current Project State:
 
-The application is fully functional and accessible via the following link: [JIT access](https://jitaccess.alpha.phac-aspc.gc.ca/). However, it's important to note that the current version deployed at this link utilizes global load balancers, which does not align with our organizational policies regarding data residency, preventing its use in a production environment. The Infrastructure as Code (IaC) for regional load balancers is ready and operational, available in [http-lb.txt](acm-infra/load%20balancers/http/http-lb.txt) and [https-lb.txt](acm-infra/load%20balancers/https/https-lb.txt) respectively. Nonetheless, an issue has been encountered with the Identity-Aware Proxy (IAP) when deploying the regional external application load balancers. Resolving this issue is the current focus, and once addressed, the application will be fully prepared for use within our organization.
+The application was fully functional, and the CI/CD pipeline was complete. However, the latest deployed version utilized global load balancers, which conflicted with our organizational data residency policies, preventing its use in production.
+
+The Custom Resource Definitions (CRDs) for regional load balancers can be found in:
+
+- [http-lb.txt](acm-infra/load%20balancers/http/http-lb.txt)
+- [https-lb.txt](acm-infra/load%20balancers/https/https-lb.txt)
+
+The issue arose due to Identity-Aware Proxy (IAP) incompatibility when deploying regional external application load balancers. After further research, I confirmed that IAP does not support regional load balancers.
+
+While investigating a potential solution, I came across the Privileged Access Management (PAM) service release notes and concluded that we should deprecate the JIT Access application in favor of PAM. I proposed this change to management and it was approved.
 
 ## Architecture Diagrams:
 
